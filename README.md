@@ -1,4 +1,6 @@
-# Mercurius dynamic schema
+# Mercurius dynamic schema 
+
+** This plugin is just a proof of concept **
 
 Sometimes can be useful to serve a different schema per request, in order to achieve this result the mercurius dynamic schema plugin can be used.
 
