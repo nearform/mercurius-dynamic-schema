@@ -1,0 +1,16 @@
+{
+  "name": "mercurius-dynamic-schema",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^4.15.0",
+    "fastify-plugin": "^4.5.0",
+    "mercurius": "^12.2.0"
+  }
+}
