@@ -21,7 +21,7 @@ function strategyFactory({
     }
 }
 
-const plugin = fp(function (fastify, opts, done) {
+const plugin = fp(async function (fastify, opts) {
     // TBD: Opt validation
     const constraintStrategy = strategyFactory({
         name: STRATEGY_NAME,
@@ -31,7 +31,7 @@ const plugin = fp(function (fastify, opts, done) {
     fastify.addConstraintStrategy(constraintStrategy)
 
     for (const schema of opts.schemas) {
-        fastify.register(async childServer => {
+        await fastify.register(async childServer => {
             childServer.register(mercurius, {
                 schema: schema.schema,
                 resolvers: schema.resolvers,
@@ -59,7 +59,6 @@ const plugin = fp(function (fastify, opts, done) {
         }, { name: `${PLUGIN_NAME}.${schema.name}` })
     }
 
-    done()
 }, { fastify: '4.x', name: PLUGIN_NAME })
 
 module.exports = plugin
