@@ -1,10 +1,9 @@
 const Fastify = require('fastify')
-const mercurius = require('mercurius')
 const mercuriusDynamicSchema = require('..')
 
 // Initialize fastify
 const app = Fastify({
-    logger: true
+  logger: true
 })
 
 // Schema 1 definition
@@ -15,12 +14,12 @@ const schema = `
   `
 
 const resolvers = {
-    Query: {
-        add: async (_, obj) => {
-            const { x, y } = obj
-            return x + y
-        }
+  Query: {
+    add: async (_, obj) => {
+      const { x, y } = obj
+      return x + y
     }
+  }
 }
 
 const schema2 = `
@@ -30,31 +29,33 @@ const schema2 = `
   `
 
 const resolvers2 = {
-    Query: {
-        subtract: async (_, obj) => {
-            const { x, y } = obj
-            return x - y
-        }
+  Query: {
+    subtract: async (_, obj) => {
+      const { x, y } = obj
+      return x - y
     }
+  }
 }
 
 app.register(mercuriusDynamicSchema, {
-    schemas: [{
-        name: 'schema1',
-        schema: schema,
-        resolvers: resolvers,
-        path: '/'
+  schemas: [
+    {
+      name: 'schema1',
+      schema: schema,
+      resolvers: resolvers,
+      path: '/'
     },
     {
-        name: 'schema2',
-        schema: schema2,
-        resolvers: resolvers2,
-        path: '/'
-    }],
-    strategy: (req, ctx) => {
-        return req.headers?.schema || 'schema1'
+      name: 'schema2',
+      schema: schema2,
+      resolvers: resolvers2,
+      path: '/'
     }
+  ],
+  // eslint-disable-next-line no-unused-vars
+  strategy: (req, _ctx) => {
+    return req.headers?.schema || 'schema1'
+  }
 })
 
 app.listen({ port: 3000 })
-
