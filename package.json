@@ -1,16 +1,54 @@
 {
   "name": "mercurius-dynamic-schema",
   "version": "1.0.0",
-  "description": "",
+  "description": "Serve different schema per request according a defined strategy",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint .",
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "prepare": "husky install"
   },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nearform/mercurius-dynamic-schema.git"
+  },
+  "keywords": [
+    "mercurius",
+    "fastify",
+    "graphql",
+    "fatify-plugin",
+    "mercurius-plugin"
+  ],
+  "author": "brainrepo",
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/nearform/mercurius-dynamic-schema/issues"
+  },
+  "homepage": "https://github.com/nearform/mercurius-dynamic-schema#readme",
+  "peerDependencies": {
     "fastify": "^4.15.0",
-    "fastify-plugin": "^4.5.0",
     "mercurius": "^12.2.0"
+  },
+  "dependencies": {
+    "fastify-plugin": "^4.5.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.1",
+    "@commitlint/config-conventional": "^17.6.1",
+    "eslint": "^8.39.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
+    "prettier": "^2.8.8"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": "eslint --cache --fix"
   }
 }
