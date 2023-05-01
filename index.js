@@ -1,8 +1,9 @@
-const fp = require('fastify-plugin')
-const mercurius = require('mercurius')
+import fp from 'fastify-plugin'
+import mercurius from 'mercurius'
 
 const PLUGIN_NAME = 'mercuriusDynamicSchema'
 const STRATEGY_NAME = 'mercuriusDynamicSchemaStrategy'
+const kRequestContext = Symbol('request context')
 
 function strategyFactory({ name, strategy }) {
   return {
@@ -25,13 +26,14 @@ function strategyFactory({ name, strategy }) {
 
 const plugin = fp(
   async function (fastify, opts) {
-    // TBD: Opt validation
     const constraintStrategy = strategyFactory({
       name: STRATEGY_NAME,
       strategy: opts.strategy
     })
 
     fastify.addConstraintStrategy(constraintStrategy)
+
+    const contextFn = opts.context
 
     for (const schema of opts.schemas) {
       await fastify.register(
@@ -47,17 +49,30 @@ const plugin = fp(
             path: schema?.path ?? '/',
             method: 'POST',
             constraints: { [STRATEGY_NAME]: schema.name },
-            handler: (req, reply) => {
-              // manage the body according the type
-              let query = req.body
+            handler: async (req, reply) => {
+              let { query, operationName, variables } = req.body
+
+              if (typeof req.body === 'string') {
+                query = req.body
+              }
 
               if (typeof query !== 'string') {
                 query = JSON.stringify(query)
               }
 
-              console.log(query)
-              // Improve query executor
-              return reply.graphql(query)
+              if (contextFn) {
+                req[kRequestContext] = await contextFn(req, reply)
+                Object.assign(req[kRequestContext], { reply, childServer })
+              } else {
+                req[kRequestContext] = { reply, app: childServer }
+              }
+
+              return reply.graphql(
+                query,
+                req[kRequestContext],
+                variables,
+                operationName
+              )
             }
           })
         },
@@ -68,4 +83,4 @@ const plugin = fp(
   { fastify: '4.x', name: PLUGIN_NAME }
 )
 
-module.exports = plugin
+export default plugin

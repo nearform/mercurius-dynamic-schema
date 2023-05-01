@@ -1,10 +1,12 @@
 import Fastify from 'fastify'
 import mercuriusDynamicSchema from '../index.js'
 
+// Initialize fastify
 const app = Fastify({
   logger: true
 })
 
+// Schema 1 definition
 const schema = `
     type Query {
       add(x: Int, y: Int): Int
@@ -13,9 +15,9 @@ const schema = `
 
 const resolvers = {
   Query: {
-    add: async (_, obj) => {
+    add: async (_, obj, ctx) => {
       const { x, y } = obj
-      return x + y
+      return x + y + Number(ctx?.add ?? 0)
     }
   }
 }
@@ -28,9 +30,9 @@ const schema2 = `
 
 const resolvers2 = {
   Query: {
-    subtract: async (_, obj) => {
+    subtract: async (_, obj, ctx) => {
       const { x, y } = obj
-      return x - y
+      return x - y + Number(ctx?.add ?? 0)
     }
   }
 }
@@ -53,6 +55,9 @@ app.register(mercuriusDynamicSchema, {
   // eslint-disable-next-line no-unused-vars
   strategy: (req, _ctx) => {
     return req.headers?.schema || 'schema1'
+  },
+  context: req => {
+    return { add: req.headers.add }
   }
 })
 
