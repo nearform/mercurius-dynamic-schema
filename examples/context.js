@@ -13,9 +13,9 @@ const schema = `
 
 const resolvers = {
   Query: {
-    add: async (_, obj) => {
+    add: async (_, obj, ctx) => {
       const { x, y } = obj
-      return x + y
+      return x + y + Number(ctx?.add ?? 0)
     }
   }
 }
@@ -28,9 +28,9 @@ const schema2 = `
 
 const resolvers2 = {
   Query: {
-    subtract: async (_, obj) => {
+    subtract: async (_, obj, ctx) => {
       const { x, y } = obj
-      return x - y
+      return x - y + Number(ctx?.add ?? 0)
     }
   }
 }
@@ -52,6 +52,9 @@ app.register(mercuriusDynamicSchema, {
   ],
   strategy: req => {
     return req.headers?.schema || 'schema1'
+  },
+  context: req => {
+    return { add: req.headers.add }
   }
 })
 

@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 0",
+    "test": "c8 --check-coverage --statements 97.67 --branches 85.71 --functions 100 --lines 97.67 tap -J --no-coverage *.test.js",
     "prepare": "husky install"
   },
   "repository": {
@@ -41,12 +41,14 @@
   "devDependencies": {
     "@commitlint/cli": "^17.6.6",
     "@commitlint/config-conventional": "^17.6.6",
+    "c8": "^8.0.0",
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
-    "prettier": "^2.8.8"
+    "prettier": "^2.8.8",
+    "tap": "^16.3.4"
   },
   "lint-staged": {
     "*.{js,jsx}": "eslint --cache --fix"
