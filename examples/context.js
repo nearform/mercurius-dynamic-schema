@@ -1,12 +1,10 @@
 import Fastify from 'fastify'
 import mercuriusDynamicSchema from '../index.js'
 
-// Initialize fastify
 const app = Fastify({
   logger: true
 })
 
-// Schema 1 definition
 const schema = `
     type Query {
       add(x: Int, y: Int): Int
@@ -52,8 +50,7 @@ app.register(mercuriusDynamicSchema, {
       path: '/'
     }
   ],
-  // eslint-disable-next-line no-unused-vars
-  strategy: (req, _ctx) => {
+  strategy: req => {
     return req.headers?.schema || 'schema1'
   },
   context: req => {

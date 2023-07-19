@@ -50,8 +50,7 @@ app.register(mercuriusDynamicSchema, {
       path: '/'
     }
   ],
-  // eslint-disable-next-line no-unused-vars
-  strategy: (req, _ctx) => {
+  strategy: req => {
     return req.headers?.schema || 'schema1'
   }
 })
