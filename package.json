@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "test": "tap",
+    "test": "c8 --check-coverage --statements 97.67 --branches 85.71 --functions 100 --lines 97.67 tap -J --no-coverage *.test.js",
     "prepare": "husky install"
   },
   "repository": {
@@ -41,6 +41,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.6.1",
     "@commitlint/config-conventional": "^17.6.1",
+    "c8": "^8.0.0",
     "eslint": "^8.39.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
