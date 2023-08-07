@@ -198,7 +198,7 @@ tap.test('path definitions', async t => {
 })
 
 tap.test('context sharing between mercurius instances', async t => {
-  t.test(`it uses the context inside the resolver`, async t => {
+  t.test('it uses the context inside the resolver', async t => {
     const app = fastify()
     app.register(mercuriusDynamicSchema, {
       schemas: [
