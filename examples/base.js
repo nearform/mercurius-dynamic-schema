@@ -41,13 +41,12 @@ app.register(mercuriusDynamicSchema, {
       name: 'schema1',
       schema: schema,
       resolvers: resolvers,
-      path: '/'
+      path: '/custom-path'
     },
     {
       name: 'schema2',
       schema: schema2,
-      resolvers: resolvers2,
-      path: '/'
+      resolvers: resolvers2
     }
   ],
   strategy: req => {
