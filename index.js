@@ -56,10 +56,6 @@ const plugin = fp(
                 query = req.body
               }
 
-              if (typeof query !== 'string') {
-                query = JSON.stringify(query)
-              }
-
               if (contextFn) {
                 req[kRequestContext] = await contextFn(req, reply)
                 Object.assign(req[kRequestContext], { reply, childServer })
