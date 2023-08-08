@@ -46,7 +46,7 @@ const plugin = fp(
           })
 
           childServer.route({
-            path: schema?.path ?? '/',
+            path: schema?.path ?? '/graphql',
             method: 'POST',
             constraints: { [STRATEGY_NAME]: schema.name },
             handler: async (req, reply) => {
@@ -54,10 +54,6 @@ const plugin = fp(
 
               if (typeof req.body === 'string') {
                 query = req.body
-              }
-
-              if (typeof query !== 'string') {
-                query = JSON.stringify(query)
               }
 
               if (contextFn) {

@@ -40,14 +40,12 @@ tap.test('schema selection', async t => {
         {
           name: 'schema1',
           schema: schema,
-          resolvers: resolvers,
-          path: '/graphql'
+          resolvers: resolvers
         },
         {
           name: 'schema2',
           schema: schema2,
-          resolvers: resolvers2,
-          path: '/graphql'
+          resolvers: resolvers2
         }
       ],
       strategy: req => {
@@ -104,14 +102,12 @@ tap.test('schema selection', async t => {
           {
             name: 'schema1',
             schema: schema,
-            resolvers: resolvers,
-            path: '/graphql'
+            resolvers: resolvers
           },
           {
             name: 'schema2',
             schema: schema2,
-            resolvers: resolvers2,
-            path: '/graphql'
+            resolvers: resolvers2
           }
         ],
         strategy: req => {
@@ -133,16 +129,83 @@ tap.test('schema selection', async t => {
   )
 })
 
-tap.test('context sharing between mercurius instancies', async t => {
-  t.test(`it uses the context inside the resolver`, async t => {
+tap.test('path definitions', async t => {
+  t.test('it falls back to /graphql when no path is defined', async t => {
     const app = fastify()
+
+    app.register(mercuriusDynamicSchema, {
+      schemas: [
+        {
+          name: 'schema1',
+          schema: schema,
+          resolvers: resolvers
+        }
+      ],
+      strategy: req => {
+        return req.headers?.schema || 'schema1'
+      },
+      context: req => ({
+        additionalAdd: Number(req.headers['additional-add'])
+      })
+    })
+
+    const response = await app.inject({
+      headers: {
+        'Content-Type': 'text/plain',
+        schema: 'schema1'
+      },
+      method: 'POST',
+      payload: '{ add(x: 1, y: 2) }',
+      url: '/graphql'
+    })
+
+    t.equal(response.statusCode, 200)
+    t.equal(response.payload, JSON.stringify({ data: { add: 3 } }))
+  })
+  t.test('it uses custom path when defined', async t => {
+    const app = fastify()
+
     app.register(mercuriusDynamicSchema, {
       schemas: [
         {
           name: 'schema1',
           schema: schema,
           resolvers: resolvers,
-          path: '/graphql'
+          path: '/custom-path'
+        }
+      ],
+      strategy: req => {
+        return req.headers?.schema || 'schema1'
+      },
+      context: req => ({
+        additionalAdd: Number(req.headers['additional-add'])
+      })
+    })
+
+    const response = await app.inject({
+      headers: {
+        'Content-Type': 'text/plain',
+        schema: 'schema1'
+      },
+      method: 'POST',
+      payload: '{ add(x: 1, y: 2) }',
+      url: '/custom-path'
+    })
+
+    t.equal(response.statusCode, 200)
+    t.equal(response.payload, JSON.stringify({ data: { add: 3 } }))
+  })
+})
+
+tap.test('context sharing between mercurius instances', async t => {
+  t.test('it uses the context inside the resolver', async t => {
+    const app = fastify()
+    app.register(mercuriusDynamicSchema, {
+      schemas: [
+        {
+          name: 'schema1',
+          schema: schema,
+          resolvers: resolvers
         },
         {
           name: 'schema2',
@@ -154,8 +217,7 @@ tap.test('context sharing between mercurius instancies', async t => {
                 return x - y + ctx.additionalAdd
               }
             }
-          },
-          path: '/graphql'
+          }
         }
       ],
       strategy: req => {
