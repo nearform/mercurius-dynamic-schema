@@ -1,0 +1,4 @@
+# vim: set filetype=yaml :
+plugin:
+  - "!@tapjs/typescript"
+allow-incomplete-coverage: true

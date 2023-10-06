@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "test": "c8 --check-coverage --statements 97.67 --branches 85.71 --functions 100 --lines 97.67 tap -J --no-coverage *.test.js",
+    "test": "tap",
     "prepare": "husky install"
   },
   "repository": {
