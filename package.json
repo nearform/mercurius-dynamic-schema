@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "test": "c8 --check-coverage --statements 97.67 --branches 85.71 --functions 100 --lines 97.67 tap -J --no-coverage *.test.js",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "tap && c8 report --check-coverage --temp-directory .tap/coverage --statements 97.67 --branches 85.71 --functions 100 --lines 97.67",
+    "test:html": "tap --coverage-report=html"
   },
   "repository": {
     "type": "git",
@@ -48,7 +49,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^14.0.1",
     "prettier": "^3.0.3",
-    "tap": "^16.3.8"
+    "tap": "^18.4.3"
   },
   "lint-staged": {
     "*.{js,jsx}": "eslint --cache --fix"

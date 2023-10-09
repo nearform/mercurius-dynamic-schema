@@ -1,6 +1,6 @@
 node_modules
 .eslintcache
-.nyc_output
+.tap
 coverage
 
 # JetBrains IDEs
