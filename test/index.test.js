@@ -1,6 +1,6 @@
 import tap from 'tap'
 import fastify from 'fastify'
-import mercuriusDynamicSchema from './index.js'
+import mercuriusDynamicSchema from '../index.js'
 
 const schema = `
     type Query {
@@ -94,7 +94,7 @@ tap.test('schema selection', async t => {
   })
 
   t.test(
-    'it fails if the selected schema doesn\'t match the request',
+    "it fails if the selected schema doesn't match the request",
     async t => {
       const app = fastify()
       app.register(mercuriusDynamicSchema, {

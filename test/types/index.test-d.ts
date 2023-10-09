@@ -1,5 +1,5 @@
 import fastify from 'fastify'
-import mercuriusDynamicSchema from '.'
+import mercuriusDynamicSchema from '../..'
 
 const app = fastify()
 

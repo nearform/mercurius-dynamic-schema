@@ -5,7 +5,7 @@ const PLUGIN_NAME = 'mercuriusDynamicSchema'
 const STRATEGY_NAME = 'mercuriusDynamicSchemaStrategy'
 const kRequestContext = Symbol('request context')
 
-function strategyFactory ({ name, strategy }) {
+function strategyFactory({ name, strategy }) {
   return {
     name,
     storage: function () {
