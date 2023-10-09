@@ -32,46 +32,88 @@ const resolvers2 = {
   }
 }
 
-tap.test('schema validation error', async t => {
-  const app = fastify()
-  app.register(mercuriusDynamicSchema, {
-    schemas: [
-      {
-        name: 'schema1',
-        schema,
-        resolvers
-      },
-      {
-        name: 'schema2',
-        schema: schema2,
-        resolvers: resolvers2
+tap.test('schema validation', async t => {
+  t.test('with an invalid Query', async t => {
+    const app = fastify()
+    app.register(mercuriusDynamicSchema, {
+      schemas: [
+        {
+          name: 'schema1',
+          schema,
+          resolvers
+        },
+        {
+          name: 'schema2',
+          schema: schema2,
+          resolvers: resolvers2
+        }
+      ],
+      strategy: req => {
+        return req.headers?.schema || 'schema1'
       }
-    ],
-    strategy: req => {
-      return req.headers?.schema || 'schema1'
+    })
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/graphql',
+      // subtract isn't a Query on schema1, therefore this throws a validation error
+      payload: '{ subtract(x: 1, y: 2) }',
+      headers: {
+        schema: 'schema1',
+        'Content-Type': 'text/plain'
+      }
+    })
+
+    const expectedResult = {
+      statusCode: 400,
+      code: 'MER_ERR_GQL_VALIDATION',
+      error: 'Bad Request',
+      message: 'Graphql validation error'
     }
-  })
 
-  const res = await app.inject({
-    method: 'POST',
-    url: '/graphql',
-    // subtract isn't a Query, therefore this throws a validation error
-    payload: '{ subtract(x: 1, y: 2) }',
-    headers: {
-      schema: 'schema1',
-      'Content-Type': 'text/plain'
+    t.equal(res.statusCode, 400)
+    t.strictSame(JSON.parse(res.body), expectedResult)
+  })
+  t.test('with a malformed Query', async t => {
+    const app = fastify()
+    app.register(mercuriusDynamicSchema, {
+      schemas: [
+        {
+          name: 'schema1',
+          schema,
+          resolvers
+        },
+        {
+          name: 'schema2',
+          schema: schema2,
+          resolvers: resolvers2
+        }
+      ],
+      strategy: req => {
+        return req.headers?.schema || 'schema1'
+      }
+    })
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/graphql',
+      payload: '{ add(x: 1, y: 2 }',
+      headers: {
+        schema: 'schema1',
+        'Content-Type': 'text/plain'
+      }
+    })
+
+    const expectedResult = {
+      statusCode: 400,
+      code: 'MER_ERR_GQL_VALIDATION',
+      error: 'Bad Request',
+      message: 'Graphql validation error'
     }
+
+    t.equal(res.statusCode, 400)
+    t.strictSame(JSON.parse(res.body), expectedResult)
   })
-
-  const expectedResult = {
-    statusCode: 400,
-    code: 'MER_ERR_GQL_VALIDATION',
-    error: 'Bad Request',
-    message: 'Graphql validation error'
-  }
-
-  t.equal(res.statusCode, 400)
-  t.strictSame(JSON.parse(res.body), expectedResult)
 })
 
 tap.test('schema selection', async t => {
