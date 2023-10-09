@@ -1,6 +1,6 @@
 import tap from 'tap'
 import fastify from 'fastify'
-import mercuriusDynamicSchema from './index.js'
+import mercuriusDynamicSchema from '../index.js'
 
 const schema = `
     type Query {
@@ -39,8 +39,8 @@ tap.test('schema selection', async t => {
       schemas: [
         {
           name: 'schema1',
-          schema: schema,
-          resolvers: resolvers
+          schema,
+          resolvers
         },
         {
           name: 'schema2',
@@ -94,15 +94,15 @@ tap.test('schema selection', async t => {
   })
 
   t.test(
-    `it fails if the selected schema doesn't match the request`,
+    "it fails if the selected schema doesn't match the request",
     async t => {
       const app = fastify()
       app.register(mercuriusDynamicSchema, {
         schemas: [
           {
             name: 'schema1',
-            schema: schema,
-            resolvers: resolvers
+            schema,
+            resolvers
           },
           {
             name: 'schema2',
@@ -137,8 +137,8 @@ tap.test('path definitions', async t => {
       schemas: [
         {
           name: 'schema1',
-          schema: schema,
-          resolvers: resolvers
+          schema,
+          resolvers
         }
       ],
       strategy: req => {
@@ -169,8 +169,8 @@ tap.test('path definitions', async t => {
       schemas: [
         {
           name: 'schema1',
-          schema: schema,
-          resolvers: resolvers,
+          schema,
+          resolvers,
           path: '/custom-path'
         }
       ],
@@ -204,8 +204,8 @@ tap.test('context sharing between mercurius instances', async t => {
       schemas: [
         {
           name: 'schema1',
-          schema: schema,
-          resolvers: resolvers
+          schema,
+          resolvers
         },
         {
           name: 'schema2',
