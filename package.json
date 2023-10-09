@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "test": "tap",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "tap && c8 report --check-coverage --temp-directory .tap/coverage --statements 97.67 --branches 85.71 --functions 100 --lines 97.67",
+    "test:html": "tap --coverage-report=html"
   },
   "repository": {
     "type": "git",
