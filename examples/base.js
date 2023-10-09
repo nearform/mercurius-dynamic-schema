@@ -39,8 +39,8 @@ app.register(mercuriusDynamicSchema, {
   schemas: [
     {
       name: 'schema1',
-      schema: schema,
-      resolvers: resolvers,
+      schema,
+      resolvers,
       path: '/custom-path'
     },
     {
