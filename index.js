@@ -3,7 +3,7 @@ import mercurius from 'mercurius'
 
 const PLUGIN_NAME = 'mercuriusDynamicSchema'
 const STRATEGY_NAME = 'mercuriusDynamicSchemaStrategy'
-const kRequestContext = Symbol('request context')
+const kRequestContext = Symbol('dynamic.schema.request.context')
 
 function strategyFactory({ name, strategy }) {
   return {
@@ -42,7 +42,10 @@ const plugin = fp(
             schema: schema.schema,
             resolvers: schema.resolvers,
             graphiql: false,
-            routes: false
+            routes: false,
+            persistedQueries: schema.persistedQueries
+            // persistedQueryProvider
+            // onlyPersisted
           })
 
           childServer.route({

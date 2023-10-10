@@ -116,6 +116,71 @@ tap.test('schema validation', async t => {
   })
 })
 
+tap.skip('query persistance', async t => {
+  t.test('it can use mercurius persisted queries', async t => {
+    const app = fastify()
+    app.register(mercuriusDynamicSchema, {
+      schemas: [
+        {
+          name: 'schema1',
+          schema,
+          resolvers,
+          persistedQueries: {
+            C900E254: '{ add(x: 1, y: 2) }'
+          }
+        },
+        {
+          name: 'schema2',
+          schema: schema2,
+          resolvers: resolvers2
+        }
+      ],
+      strategy: req => {
+        return req.headers?.schema || 'schema1'
+      }
+    })
+
+    const response = await app.inject({
+      method: 'POST',
+      url: '/graphql',
+      payload: '{ add(x: 1, y: 2) }',
+      headers: {
+        schema: 'schema1',
+        'Content-Type': 'text/plain'
+      }
+    })
+
+    t.equal(response.statusCode, 200)
+    t.equal(
+      response.payload,
+      JSON.stringify({
+        data: {
+          add: 3
+        }
+      })
+    )
+
+    const response1 = await app.inject({
+      method: 'POST',
+      url: '/graphql',
+      payload: '{query: C900E254, persisted: true}',
+      headers: {
+        schema: 'schema1',
+        'Content-Type': 'text/plain'
+      }
+    })
+    t.equal(response1.statusCode, 200)
+    t.equal(
+      response1.payload,
+      JSON.stringify({
+        data: {
+          add: 3
+        }
+      })
+    )
+  })
+})
+
 tap.test('schema selection', async t => {
   t.test('it can select the schema by header variable', async t => {
     const app = fastify()
