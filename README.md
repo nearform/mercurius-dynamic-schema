@@ -14,7 +14,7 @@ Note: persisted queries are currently **not** supported.
 ## Installation
 
 ```bash
-npm i fastify mercurius mercurius-dynamic-schema
+npm i fastify mercurius-dynamic-schema
 ```
 
 ## Quickstart
