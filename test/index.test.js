@@ -1,6 +1,6 @@
-import tap from 'tap'
-import fastify from 'fastify'
-import mercuriusDynamicSchema from '../index.js'
+const tap = require('tap')
+const Fastify = require('fastify')
+const mercuriusDynamicSchema = require('../index')
 
 const schema = `
     type Query {
@@ -34,7 +34,7 @@ const resolvers2 = {
 
 tap.test('schema validation', async t => {
   t.test('with an invalid Query', async t => {
-    const app = fastify()
+    const app = Fastify()
     app.register(mercuriusDynamicSchema, {
       schemas: [
         {
@@ -75,7 +75,7 @@ tap.test('schema validation', async t => {
     t.strictSame(JSON.parse(res.body), expectedResult)
   })
   t.test('with a malformed Query', async t => {
-    const app = fastify()
+    const app = Fastify()
     app.register(mercuriusDynamicSchema, {
       schemas: [
         {
@@ -118,7 +118,7 @@ tap.test('schema validation', async t => {
 
 tap.test('schema selection', async t => {
   t.test('it can select the schema by header variable', async t => {
-    const app = fastify()
+    const app = Fastify()
     app.register(mercuriusDynamicSchema, {
       schemas: [
         {
@@ -180,7 +180,7 @@ tap.test('schema selection', async t => {
   t.test(
     "it fails if the selected schema doesn't match the request",
     async t => {
-      const app = fastify()
+      const app = Fastify()
       app.register(mercuriusDynamicSchema, {
         schemas: [
           {
@@ -215,7 +215,7 @@ tap.test('schema selection', async t => {
 
 tap.test('path definitions', async t => {
   t.test('it falls back to /graphql when no path is defined', async t => {
-    const app = fastify()
+    const app = Fastify()
 
     app.register(mercuriusDynamicSchema, {
       schemas: [
@@ -247,7 +247,7 @@ tap.test('path definitions', async t => {
     t.equal(response.payload, JSON.stringify({ data: { add: 3 } }))
   })
   t.test('it uses custom path when defined', async t => {
-    const app = fastify()
+    const app = Fastify()
 
     app.register(mercuriusDynamicSchema, {
       schemas: [
@@ -283,7 +283,7 @@ tap.test('path definitions', async t => {
 
 tap.test('context sharing between mercurius instances', async t => {
   t.test('it uses the context inside the resolver', async t => {
-    const app = fastify()
+    const app = Fastify()
     app.register(mercuriusDynamicSchema, {
       schemas: [
         {
