@@ -21,7 +21,6 @@ npm i fastify mercurius mercurius-dynamic-schema
 
 ```js
 const Fastify = require("fastify");
-const mercurius = require("mercurius");
 const mercuriusDynamicSchema = require("mercurius-dynamic-schema");
 
 const app = Fastify({
