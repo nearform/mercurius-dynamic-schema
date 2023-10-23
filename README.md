@@ -63,7 +63,6 @@ app.register(mercuriusDynamicSchema, {
       name: 'schema1',
       schema: schema1,
       resolvers: resolvers1,
-      path: '/custom-path'
     },
     {
       name: 'schema2',
@@ -81,10 +80,31 @@ app.register(mercuriusDynamicSchema, {
 
 app.listen({ port: 3000 })
 
-// Use the following to test
-// curl -X POST -H 'content-type: application/json' -d '{ "query": "{ add(x: 2, y: 2) }" }' localhost:3000/custom-path
-// curl -X POST -H 'content-type: application/json' -d '{ "query": "{ subtract(x: 2, y: 1) }" }' localhost:3000/graphql
 ```
+
+Then you can start the server using Node.js and you can send HTTP request using curl: 
+
+```bash
+curl -X POST \
+     -H 'content-type: application/json' \
+     -d '{ "query": "{ add(x: 2, y: 2) }" }' \
+     localhost:3000/graphql
+
+Response: 
+{"data":{"add":4}}
+
+curl -X POST \
+     -H 'content-type: application/json' \
+     -H 'schema: schema2' \
+     -d '{ "query": "{ subtract(x: 2, y: 1) }" }' \
+     localhost:3000/graphql
+
+Response:
+{"data":{"subtract":1}}
+```
+
+In the fist request, we're not specifying the schema header, so we will use the default one (schema1 as defined in the code above).
+
 
 ## Options
 
@@ -94,7 +114,7 @@ You can pass the following options when registering the plugin (all of them are 
 | --- | --- | --- |
 | `schemas` (required) | `{ name: string; path?: string; resolvers: IResolvers, schema: string ()}[]` | An array of dynamic schema definitions (see details below).
 | `strategy` (required) | `req => string` | A function that returns a strategy name from a request object. This function will get the value of the constraint from each incoming request, and is used in `deriveConstraint` of fastify's [addConstraintStrategy](https://fastify.dev/docs/latest/Reference/Server/#addconstraintstrategy)
-| `context` | `req => string` | A function that returns a query context object from a request object.|
+| `context` | `req => string` | A function that returns a context object based on the request. See [Mercurius Context](https://mercurius.dev/#/docs/context) for reference.|
 
 ### **schemas**
 Each schema definition uses the following properties
@@ -102,22 +122,11 @@ Each schema definition uses the following properties
 |prop | required | default | description |
 |-----|----------|---------|-------------|
 |name| yes | | a unique name across all schema definitions|
-|schema| yes | | the GraphQl schema|
+|schema| yes | | the GraphQL schema|
 |resolvers| yes | | the resolvers corresponding to the schema defined above|
 |path| no | `/graphql` | the route at which these schema and resolvers will be available|
 
-Example (see [./examples/base.js](mercurius-dynamic-schema/blob/master/examples/base.js) for a complete example)
 
-```js
-[
-  {
-    name: 'schema1',
-    schema,
-    resolvers,
-    path: '/specific-path'
-  }
-]
-```
 
 ### **strategy**
 
@@ -131,7 +140,7 @@ Example: this will return the value of a header named `schema`, or default to `s
 
 ### **context**
 
-Example: this will pass a context containing a prop named `add`, which has the value from a header name `add`
+Example: this will pass a context containing a prop named `add`, which has the value from a header name `add`. Inside the resolver than we can read the `add` property using `ctx.add` where `ctx` is the context object in the resolver.
 
 ```js
   req => {
@@ -147,11 +156,6 @@ Example: this will pass a context containing a prop named `add`, which has the v
 - notifications about commits waiting to be released thanks to ["notify release" GitHub action](https://github.com/nearform/github-action-notify-release)
 - PRs' linked issues check with ["check linked issues" GitHub action](https://github.com/nearform/github-action-check-linked-issues)
 - Continuous Integration GitHub workflow
-
-
-## Examples
-
-Check [GitHub repo](mercurius-dynamic-schema/blob/master/examples) for more examples.
 
 ## License
 
