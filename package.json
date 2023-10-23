@@ -44,7 +44,7 @@
     "fastify-plugin": "^4.5.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.7.2",
+    "@commitlint/cli": "^18.0.0",
     "@commitlint/config-conventional": "^18.0.0",
     "@types/node": "^20.1.0",
     "@types/ws": "^8.5.3",
