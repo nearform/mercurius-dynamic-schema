@@ -1,6 +1,6 @@
 {
   "name": "mercurius-dynamic-schema",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Serve different schema per request according a defined strategy",
   "main": "index.js",
   "types": "index.d.ts",
