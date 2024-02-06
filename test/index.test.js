@@ -74,6 +74,7 @@ tap.test('schema validation', async t => {
     t.equal(res.statusCode, 400)
     t.strictSame(JSON.parse(res.body), expectedResult)
   })
+
   t.test('with a malformed Query', async t => {
     const app = Fastify()
     app.register(mercuriusDynamicSchema, {

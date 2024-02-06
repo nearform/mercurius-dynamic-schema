@@ -1,5 +1,7 @@
 const fp = require('fastify-plugin')
 const mercurius = require('mercurius')
+const { MER_ERR_GQL_VALIDATION } = require('mercurius/lib/errors')
+const { createPersistedQueryExecutor } = require('mercurius/lib/persistedQuery')
 
 const PLUGIN_NAME = 'mercuriusDynamicSchema'
 const STRATEGY_NAME = 'mercuriusDynamicSchemaStrategy'
@@ -44,12 +46,19 @@ async function mercuriusDynamicSchema(fastify, opts) {
           routes: false
         })
 
+        const persistedQueryProvider =
+          childServer.persistedQuery?.provider ?? {}
+
+        const execute = Object.keys(persistedQueryProvider).length
+          ? createPersistedQueryExecutor(persistedQueryProvider, executeQuery)
+          : executeRegularQuery
+
         childServer.route({
           path: schema?.path ?? '/graphql',
           method: 'POST',
           constraints: { [STRATEGY_NAME]: schema.name },
           handler: async (req, reply) => {
-            let { query, operationName, variables } = req.body
+            let { query, variables, extensions } = req.body
 
             if (typeof req.body === 'string') {
               query = req.body
@@ -62,17 +71,48 @@ async function mercuriusDynamicSchema(fastify, opts) {
               req[kRequestContext] = { reply, app: childServer }
             }
 
-            return reply.graphql(
-              query,
-              req[kRequestContext],
-              variables,
-              operationName
+            return execute(
+              {
+                query,
+                variables: variables && tryJSONParse(req, variables),
+                extensions: extensions && tryJSONParse(req, extensions)
+              },
+              req,
+              reply
             )
           }
         })
       },
       { name: `${PLUGIN_NAME}.${schema.name}` }
     )
+  }
+}
+
+async function executeQuery(query, variables, operationName, request, reply) {
+  // Handle the query, throwing an error if required
+  return reply.graphql(
+    query,
+    Object.assign(request[kRequestContext], {
+      __currentQuery: query
+    }),
+    variables,
+    operationName
+  )
+}
+
+function executeRegularQuery(body, request, reply) {
+  const { query, operationName, variables } = body
+  return executeQuery(query, variables, operationName, request, reply)
+}
+
+function tryJSONParse(request, value) {
+  try {
+    return JSON.parse(value)
+  } catch (err) {
+    const wrap = new MER_ERR_GQL_VALIDATION()
+    err.code = wrap.code
+    err.statusCode = wrap.statusCode
+    throw err
   }
 }
 
