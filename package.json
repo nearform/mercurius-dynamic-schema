@@ -41,8 +41,7 @@
     "mercurius": "^12.2.0"
   },
   "dependencies": {
-    "fastify-plugin": "^4.5.1",
-    "mercurius": "file:.yalc/mercurius"
+    "fastify-plugin": "^4.5.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.0.0",
