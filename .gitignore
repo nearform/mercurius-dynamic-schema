@@ -10,3 +10,7 @@ coverage
 
 # OS X
 .DS_Store
+
+# yalc
+.yalc
+yalc.lock
