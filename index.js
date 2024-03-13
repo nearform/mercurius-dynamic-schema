@@ -43,7 +43,7 @@ async function mercuriusDynamicSchema(fastify, opts) {
           graphiql: false,
           context: contextFn,
           routes: true,
-          additionalRouteProps: {
+          additionalRouteOptions: {
             constraints: { [STRATEGY_NAME]: schema.name }
           }
         })
