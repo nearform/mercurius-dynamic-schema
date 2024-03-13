@@ -54,10 +54,12 @@ tap.test('schema validation', async t => {
     })
 
     const res = await app.inject({
-      method: 'POST',
+      method: 'GET',
       url: '/graphql',
       // subtract isn't a Query on schema1, therefore this throws a validation error
-      payload: '{ subtract(x: 1, y: 2) }',
+      query: {
+        query: '{ subtract(x: 1, y: 2) }'
+      },
       headers: {
         schema: 'schema1',
         'Content-Type': 'text/plain'
@@ -65,10 +67,18 @@ tap.test('schema validation', async t => {
     })
 
     const expectedResult = {
-      statusCode: 400,
-      code: 'MER_ERR_GQL_VALIDATION',
-      error: 'Bad Request',
-      message: 'Graphql validation error'
+      data: null,
+      errors: [
+        {
+          message: 'Cannot query field "subtract" on type "Query".',
+          locations: [
+            {
+              line: 1,
+              column: 3
+            }
+          ]
+        }
+      ]
     }
 
     t.equal(res.statusCode, 400)
@@ -95,9 +105,11 @@ tap.test('schema validation', async t => {
     })
 
     const res = await app.inject({
-      method: 'POST',
+      method: 'GET',
       url: '/graphql',
-      payload: '{ add(x: 1, y: 2 }',
+      query: {
+        query: '{ add(x: 1, y: 2 }'
+      },
       headers: {
         schema: 'schema1',
         'Content-Type': 'text/plain'
@@ -105,10 +117,13 @@ tap.test('schema validation', async t => {
     })
 
     const expectedResult = {
-      statusCode: 400,
-      code: 'MER_ERR_GQL_VALIDATION',
-      error: 'Bad Request',
-      message: 'Graphql validation error'
+      data: null,
+      errors: [
+        {
+          message: 'Syntax Error: Expected Name, found "}".',
+          locations: [{ line: 1, column: 18 }]
+        }
+      ]
     }
 
     t.equal(res.statusCode, 400)
@@ -138,9 +153,8 @@ tap.test('schema selection', async t => {
     })
 
     const response = await app.inject({
-      method: 'POST',
-      url: '/graphql',
-      payload: '{ add(x: 1, y: 2) }',
+      method: 'GET',
+      url: '/graphql?query={add(x: 1, y: 2)}',
       headers: {
         schema: 'schema1',
         'Content-Type': 'text/plain'
@@ -158,9 +172,8 @@ tap.test('schema selection', async t => {
     )
 
     const response1 = await app.inject({
-      method: 'POST',
-      url: '/graphql',
-      payload: '{ subtract(x: 1, y: 2) }',
+      method: 'GET',
+      url: '/graphql?query={subtract(x: 1, y: 2)}',
       headers: {
         schema: 'schema2',
         'Content-Type': 'text/plain'
@@ -200,9 +213,8 @@ tap.test('schema selection', async t => {
       })
 
       const response = await app.inject({
-        method: 'POST',
-        url: '/graphql',
-        payload: '{ add(x: 1, y: 2) }',
+        method: 'GET',
+        url: '/graphql?query={add(x: 1, y: 2)}',
         headers: {
           schema: 'schema2',
           'Content-Type': 'text/plain'
@@ -238,8 +250,10 @@ tap.test('path definitions', async t => {
         'Content-Type': 'text/plain',
         schema: 'schema1'
       },
-      method: 'POST',
-      payload: '{ add(x: 1, y: 2) }',
+      method: 'GET',
+      query: {
+        query: '{ add(x: 1, y: 2) }'
+      },
       url: '/graphql'
     })
 
@@ -271,8 +285,10 @@ tap.test('path definitions', async t => {
         'Content-Type': 'text/plain',
         schema: 'schema1'
       },
-      method: 'POST',
-      payload: '{ add(x: 1, y: 2) }',
+      method: 'GET',
+      query: {
+        query: '{ add(x: 1, y: 2) }'
+      },
       url: '/custom-path'
     })
 
@@ -313,9 +329,11 @@ tap.test('context sharing between mercurius instances', async t => {
     })
 
     const response = await app.inject({
-      method: 'POST',
+      method: 'GET',
       url: '/graphql',
-      payload: '{ subtract(x: 1, y: 2) }',
+      query: {
+        query: '{ subtract(x: 1, y: 2) }'
+      },
       headers: {
         schema: 'schema2',
         'Content-Type': 'text/plain',

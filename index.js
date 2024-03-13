@@ -3,7 +3,6 @@ const mercurius = require('mercurius')
 
 const PLUGIN_NAME = 'mercuriusDynamicSchema'
 const STRATEGY_NAME = 'mercuriusDynamicSchemaStrategy'
-const kRequestContext = Symbol('request context')
 
 function strategyFactory({ name, strategy }) {
   return {
@@ -39,35 +38,13 @@ async function mercuriusDynamicSchema(fastify, opts) {
       async childServer => {
         childServer.register(mercurius, {
           schema: schema.schema,
+          path: schema.path,
           resolvers: schema.resolvers,
           graphiql: false,
-          routes: false
-        })
-
-        childServer.route({
-          path: schema?.path ?? '/graphql',
-          method: 'POST',
-          constraints: { [STRATEGY_NAME]: schema.name },
-          handler: async (req, reply) => {
-            let { query, operationName, variables } = req.body
-
-            if (typeof req.body === 'string') {
-              query = req.body
-            }
-
-            if (contextFn) {
-              req[kRequestContext] = await contextFn(req, reply)
-              Object.assign(req[kRequestContext], { reply, childServer })
-            } else {
-              req[kRequestContext] = { reply, app: childServer }
-            }
-
-            return reply.graphql(
-              query,
-              req[kRequestContext],
-              variables,
-              operationName
-            )
+          context: contextFn,
+          routes: true,
+          additionalRouteOptions: {
+            constraints: { [STRATEGY_NAME]: schema.name }
           }
         })
       },
