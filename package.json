@@ -9,7 +9,7 @@
     "lint:fix": "npm run lint -- --fix",
     "lint:standard": "standard | snazzy",
     "lint:typescript": "standard --parser @typescript-eslint/parser --plugin @typescript-eslint/eslint-plugin index.test-d.ts",
-    "prepare": "husky install",
+    "prepare": "husky",
     "test": "npm run test:unit && npm run test:types",
     "test:unit": "tap test/*.test.js && c8 report --check-coverage --temp-directory .tap/coverage --statements 97.67 --branches 85.71 --functions 100 --lines 97.67",
     "test:types": "tsd"
@@ -51,7 +51,7 @@
     "c8": "^9.0.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
-    "husky": "^9.0.6",
+    "husky": "^9.0.11",
     "lint-staged": "^15.0.2",
     "mercurius": "^14.0.0",
     "prettier": "^3.0.3",
