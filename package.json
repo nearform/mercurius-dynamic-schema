@@ -41,7 +41,7 @@
     "mercurius": "^14.0.0"
   },
   "dependencies": {
-    "fastify-plugin": "^4.5.1"
+    "fastify-plugin": "^5.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.0.3",
