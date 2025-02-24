@@ -38,7 +38,7 @@
   "homepage": "https://github.com/nearform/mercurius-dynamic-schema#readme",
   "peerDependencies": {
     "fastify": "^4.15.0",
-    "mercurius": "^14.0.0"
+    "mercurius": "^16.1.0"
   },
   "dependencies": {
     "fastify-plugin": "^5.0.1"
@@ -53,7 +53,7 @@
     "eslint-plugin-prettier": "^5.0.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.0.2",
-    "mercurius": "^14.0.0",
+    "mercurius": "^16.1.0",
     "prettier": "^3.0.3",
     "tap": "^21.0.0",
     "tsd": "^0.31.0",
