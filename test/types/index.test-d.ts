@@ -1,5 +1,5 @@
 import fastify from 'fastify'
-import mercuriusDynamicSchema from '../..'
+import mercuriusDynamicSchema from '../../index.js'
 
 const app = fastify()
 

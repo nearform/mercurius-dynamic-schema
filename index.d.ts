@@ -1,4 +1,4 @@
-import { FastifyInstance, FastifyRequest } from 'fastify'
+import { FastifyPluginAsync, FastifyRequest } from 'fastify'
 import { IResolvers, MercuriusContext } from 'mercurius'
 
 /**
@@ -23,12 +23,7 @@ export interface MercuriusDynamicSchemaOptions<TParent = any, TArgs = any, TCont
   context?: (arg0: FastifyRequest) => any
 }
 
-export default MercuriusDynamicSchema
+export default mercuriusDynamicSchema
 
 /** Mercurius Dynamic Schema is a plugin for `mercurius` that allows using separate schemas based on request parameters. */
-declare function MercuriusDynamicSchema (
-  instance: FastifyInstance,
-  opts: MercuriusDynamicSchemaOptions
-): Promise<void>;
-
-declare namespace MercuriusDynamicSchema {}
+export declare const mercuriusDynamicSchema: FastifyPluginAsync<MercuriusDynamicSchemaOptions | {}>;
