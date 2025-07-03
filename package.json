@@ -37,31 +37,34 @@
   },
   "homepage": "https://github.com/nearform/mercurius-dynamic-schema#readme",
   "peerDependencies": {
-    "fastify": "^4.15.0",
-    "mercurius": "^14.0.0"
+    "fastify": "^5.4.0",
+    "mercurius": "^16.2.0"
   },
   "dependencies": {
     "fastify-plugin": "^5.0.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.0.3",
-    "@commitlint/config-conventional": "^19.0.3",
-    "@types/node": "^24.0.3",
-    "@types/ws": "^8.5.3",
-    "c8": "^10.1.2",
-    "eslint-config-prettier": "^10.0.1",
-    "eslint-plugin-prettier": "^5.0.0",
-    "husky": "^9.0.11",
-    "lint-staged": "^16.0.0",
-    "mercurius": "^14.0.0",
-    "prettier": "^3.0.3",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@types/node": "^24.0.10",
+    "@types/ws": "^8.18.1",
+    "c8": "^10.1.3",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.5.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "mercurius": "^16.2.0",
+    "prettier": "^3.6.2",
     "tsd": "^0.32.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.8.3"
   },
   "lint-staged": {
     "*.{js,jsx}": "eslint --cache --fix"
   },
   "tsd": {
     "directory": "test/types"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

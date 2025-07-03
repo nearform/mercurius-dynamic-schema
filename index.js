@@ -54,7 +54,7 @@ async function mercuriusDynamicSchema(fastify, opts) {
 }
 
 module.exports = fp(mercuriusDynamicSchema, {
-  fastify: '4.x',
+  fastify: '5.x',
   name: PLUGIN_NAME
 })
 module.exports.default = mercuriusDynamicSchema

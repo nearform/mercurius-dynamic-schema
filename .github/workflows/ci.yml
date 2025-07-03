@@ -9,16 +9,12 @@ on:
 jobs:
   test:
     name: Lint and test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-      - run: |
-          npm ci
-          npm run lint
-          npm test
+    uses: pkgjs/action/.github/workflows/node-test.yaml@v0
+    with:
+      strategy-fail-fast: true
+      test-command: |
+        npm run lint
+        npm run test
 
   automerge:
     name: Merge dependabot's PRs
