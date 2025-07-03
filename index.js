@@ -53,9 +53,11 @@ async function mercuriusDynamicSchema(fastify, opts) {
   }
 }
 
-module.exports = fp(mercuriusDynamicSchema, {
-  fastify: '4.x',
+const _mercuriusDynamicSchema = fp(mercuriusDynamicSchema, {
+  fastify: '5.x',
   name: PLUGIN_NAME
 })
-module.exports.default = mercuriusDynamicSchema
-module.exports.mercuriusDynamicSchema = mercuriusDynamicSchema
+
+module.exports = _mercuriusDynamicSchema
+module.exports.default = _mercuriusDynamicSchema
+module.exports.mercuriusDynamicSchema = _mercuriusDynamicSchema
