@@ -1,4 +1,4 @@
-const tap = require('tap')
+const { describe, test } = require('node:test')
 const Fastify = require('fastify')
 const mercuriusDynamicSchema = require('../index')
 
@@ -32,8 +32,8 @@ const resolvers2 = {
   }
 }
 
-tap.test('schema validation', async t => {
-  t.test('with an invalid Query', async t => {
+describe('schema validation', () => {
+  test('with an invalid Query', async t => {
     const app = Fastify()
     app.register(mercuriusDynamicSchema, {
       schemas: [
@@ -81,10 +81,10 @@ tap.test('schema validation', async t => {
       ]
     }
 
-    t.equal(res.statusCode, 400)
-    t.strictSame(JSON.parse(res.body), expectedResult)
+    t.assert.strictEqual(res.statusCode, 400)
+    t.assert.deepStrictEqual(JSON.parse(res.body), expectedResult)
   })
-  t.test('with a malformed Query', async t => {
+  test('with a malformed Query', async t => {
     const app = Fastify()
     app.register(mercuriusDynamicSchema, {
       schemas: [
@@ -126,13 +126,13 @@ tap.test('schema validation', async t => {
       ]
     }
 
-    t.equal(res.statusCode, 400)
-    t.strictSame(JSON.parse(res.body), expectedResult)
+    t.assert.strictEqual(res.statusCode, 400)
+    t.assert.deepStrictEqual(JSON.parse(res.body), expectedResult)
   })
 })
 
-tap.test('schema selection', async t => {
-  t.test('it can select the schema by header variable', async t => {
+describe('schema selection', () => {
+  test('it can select the schema by header variable', async t => {
     const app = Fastify()
     app.register(mercuriusDynamicSchema, {
       schemas: [
@@ -161,8 +161,8 @@ tap.test('schema selection', async t => {
       }
     })
 
-    t.equal(response.statusCode, 200)
-    t.equal(
+    t.assert.strictEqual(response.statusCode, 200)
+    t.assert.strictEqual(
       response.payload,
       JSON.stringify({
         data: {
@@ -179,8 +179,8 @@ tap.test('schema selection', async t => {
         'Content-Type': 'text/plain'
       }
     })
-    t.equal(response1.statusCode, 200)
-    t.equal(
+    t.assert.strictEqual(response1.statusCode, 200)
+    t.assert.strictEqual(
       response1.payload,
       JSON.stringify({
         data: {
@@ -190,43 +190,40 @@ tap.test('schema selection', async t => {
     )
   })
 
-  t.test(
-    "it fails if the selected schema doesn't match the request",
-    async t => {
-      const app = Fastify()
-      app.register(mercuriusDynamicSchema, {
-        schemas: [
-          {
-            name: 'schema1',
-            schema,
-            resolvers
-          },
-          {
-            name: 'schema2',
-            schema: schema2,
-            resolvers: resolvers2
-          }
-        ],
-        strategy: req => {
-          return req.headers?.schema || 'schema1'
+  test("it fails if the selected schema doesn't match the request", async t => {
+    const app = Fastify()
+    app.register(mercuriusDynamicSchema, {
+      schemas: [
+        {
+          name: 'schema1',
+          schema,
+          resolvers
+        },
+        {
+          name: 'schema2',
+          schema: schema2,
+          resolvers: resolvers2
         }
-      })
+      ],
+      strategy: req => {
+        return req.headers?.schema || 'schema1'
+      }
+    })
 
-      const response = await app.inject({
-        method: 'GET',
-        url: '/graphql?query={add(x: 1, y: 2)}',
-        headers: {
-          schema: 'schema2',
-          'Content-Type': 'text/plain'
-        }
-      })
-      t.equal(response.statusCode, 400)
-    }
-  )
+    const response = await app.inject({
+      method: 'GET',
+      url: '/graphql?query={add(x: 1, y: 2)}',
+      headers: {
+        schema: 'schema2',
+        'Content-Type': 'text/plain'
+      }
+    })
+    t.assert.strictEqual(response.statusCode, 400)
+  })
 })
 
-tap.test('path definitions', async t => {
-  t.test('it falls back to /graphql when no path is defined', async t => {
+describe('path definitions', () => {
+  test('it falls back to /graphql when no path is defined', async t => {
     const app = Fastify()
 
     app.register(mercuriusDynamicSchema, {
@@ -257,10 +254,10 @@ tap.test('path definitions', async t => {
       url: '/graphql'
     })
 
-    t.equal(response.statusCode, 200)
-    t.equal(response.payload, JSON.stringify({ data: { add: 3 } }))
+    t.assert.strictEqual(response.statusCode, 200)
+    t.assert.strictEqual(response.payload, JSON.stringify({ data: { add: 3 } }))
   })
-  t.test('it uses custom path when defined', async t => {
+  test('it uses custom path when defined', async t => {
     const app = Fastify()
 
     app.register(mercuriusDynamicSchema, {
@@ -292,13 +289,13 @@ tap.test('path definitions', async t => {
       url: '/custom-path'
     })
 
-    t.equal(response.statusCode, 200)
-    t.equal(response.payload, JSON.stringify({ data: { add: 3 } }))
+    t.assert.strictEqual(response.statusCode, 200)
+    t.assert.strictEqual(response.payload, JSON.stringify({ data: { add: 3 } }))
   })
 })
 
-tap.test('context sharing between mercurius instances', async t => {
-  t.test('it uses the context inside the resolver', async t => {
+describe('context sharing between mercurius instances', () => {
+  test('it uses the context inside the resolver', async t => {
     const app = Fastify()
     app.register(mercuriusDynamicSchema, {
       schemas: [
@@ -340,8 +337,8 @@ tap.test('context sharing between mercurius instances', async t => {
         'additional-add': '3'
       }
     })
-    t.equal(response.statusCode, 200)
-    t.equal(
+    t.assert.strictEqual(response.statusCode, 200)
+    t.assert.strictEqual(
       response.payload,
       JSON.stringify({
         data: {
