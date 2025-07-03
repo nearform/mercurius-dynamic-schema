@@ -11,7 +11,7 @@
     "lint:typescript": "standard --parser @typescript-eslint/parser --plugin @typescript-eslint/eslint-plugin index.test-d.ts",
     "prepare": "husky",
     "test": "npm run test:unit && npm run test:types",
-    "test:unit": "tap test/*.test.js && c8 report --check-coverage --temp-directory .tap/coverage --statements 97.67 --branches 85.71 --functions 100 --lines 97.67",
+    "test:unit": "c8 node --test test/*.test.js --check-coverage --statements 100 --branches 100 --functions 100 --lines 100",
     "test:types": "tsd"
   },
   "repository": {
@@ -55,7 +55,6 @@
     "lint-staged": "^16.0.0",
     "mercurius": "^14.0.0",
     "prettier": "^3.0.3",
-    "tap": "^21.0.0",
     "tsd": "^0.32.0",
     "typescript": "^5.2.2"
   },
