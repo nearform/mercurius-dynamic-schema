@@ -4,7 +4,11 @@ import { IResolvers, MercuriusContext } from 'mercurius'
 /**
  * Mercurius Dynamic schema entry.
  */
-export type MercuriusDynamicSchemaEntry<TParent = any, TArgs = any, TContext = MercuriusContext> = {
+export type MercuriusDynamicSchemaEntry<
+  _TParent = any,
+  _TArgs = any,
+  _TContext = MercuriusContext
+> = {
   name: string
   path?: string
   resolvers: IResolvers
@@ -14,7 +18,11 @@ export type MercuriusDynamicSchemaEntry<TParent = any, TArgs = any, TContext = M
 /**
  * Mercurius dynamic schema options.
  */
-export interface MercuriusDynamicSchemaOptions<TParent = any, TArgs = any, TContext = MercuriusContext> {
+export interface MercuriusDynamicSchemaOptions<
+  TParent = any,
+  TArgs = any,
+  TContext = MercuriusContext
+> {
   /**
    * The dynamic schemas definition for the Mercurius GraphQL server.
    */
@@ -26,4 +34,6 @@ export interface MercuriusDynamicSchemaOptions<TParent = any, TArgs = any, TCont
 export default mercuriusDynamicSchema
 
 /** Mercurius Dynamic Schema is a plugin for `mercurius` that allows using separate schemas based on request parameters. */
-export declare const mercuriusDynamicSchema: FastifyPluginAsync<MercuriusDynamicSchemaOptions | {}>;
+export declare const mercuriusDynamicSchema: FastifyPluginAsync<
+  MercuriusDynamicSchemaOptions | {}
+>

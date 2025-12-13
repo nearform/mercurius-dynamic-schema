@@ -14,7 +14,7 @@ const schema = `
 
 const resolvers = {
   Query: {
-    add: async (_: any, obj: any) => {
+    add: async (_: unknown, obj: { x: number; y: number }) => {
       const { x, y } = obj
       return x + y
     }
@@ -29,7 +29,7 @@ const schema2 = `
 
 const resolvers2 = {
   Query: {
-    subtract: async (_: any, obj: any) => {
+    subtract: async (_: unknown, obj: { x: number; y: number }) => {
       const { x, y } = obj
       return x - y
     }

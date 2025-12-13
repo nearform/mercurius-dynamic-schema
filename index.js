@@ -1,5 +1,5 @@
-const fp = require('fastify-plugin')
-const mercurius = require('mercurius')
+import fp from 'fastify-plugin'
+import { mercurius } from 'mercurius'
 
 const PLUGIN_NAME = 'mercuriusDynamicSchema'
 const STRATEGY_NAME = 'mercuriusDynamicSchemaStrategy'
@@ -23,7 +23,7 @@ function strategyFactory({ name, strategy }) {
   }
 }
 
-async function mercuriusDynamicSchema(fastify, opts) {
+export async function mercuriusDynamicSchema(fastify, opts) {
   const constraintStrategy = strategyFactory({
     name: STRATEGY_NAME,
     strategy: opts.strategy
@@ -53,9 +53,7 @@ async function mercuriusDynamicSchema(fastify, opts) {
   }
 }
 
-module.exports = fp(mercuriusDynamicSchema, {
+export default fp(mercuriusDynamicSchema, {
   fastify: '5.x',
   name: PLUGIN_NAME
 })
-module.exports.default = mercuriusDynamicSchema
-module.exports.mercuriusDynamicSchema = mercuriusDynamicSchema

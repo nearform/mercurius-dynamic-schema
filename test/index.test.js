@@ -1,6 +1,6 @@
-const { describe, test } = require('node:test')
-const Fastify = require('fastify')
-const mercuriusDynamicSchema = require('../index')
+import Fastify from 'fastify'
+import { describe, test } from 'node:test'
+import mercuriusDynamicSchema from '../index.js'
 
 const schema = `
     type Query {
