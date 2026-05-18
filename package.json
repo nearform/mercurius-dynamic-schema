@@ -43,7 +43,7 @@
     "fastify-plugin": "^5.1.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.2.0",
+    "@commitlint/cli": "^21.0.1",
     "@commitlint/config-conventional": "^21.0.1",
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^10.0.1",
