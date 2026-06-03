@@ -1,6 +1,13 @@
 import fastify from 'fastify'
-import mercuriusDynamicSchema from '../../index.js'
+import { expect } from 'tstyche'
+import mercuriusDynamicSchema, {
+  MercuriusDynamicSchemaEntry,
+  MercuriusDynamicSchemaOptions
+} from './index.js'
 
+// Smoke tests: ensure the plugin registers with the documented option shapes.
+// If a future change to index.d.ts breaks the public types, tsc inside tstyche
+// will fail on one of the app.register(...) calls below.
 const app = fastify()
 
 // Register without options
@@ -78,3 +85,26 @@ app.register(mercuriusDynamicSchema, {
     return { add: req.headers.add }
   }
 })
+
+// The plugin's default export is a FastifyPluginAsync parameterised by
+// MercuriusDynamicSchemaOptions (with default generics) or an empty object.
+expect(mercuriusDynamicSchema).type.toBeAssignableTo<
+  import('fastify').FastifyPluginAsync<MercuriusDynamicSchemaOptions | {}>
+>()
+
+// MercuriusDynamicSchemaOptions shape: required `schemas` array, required
+// `strategy` returning a string or string[], and an optional `context`.
+expect<MercuriusDynamicSchemaOptions>().type.toBe<{
+  schemas: MercuriusDynamicSchemaEntry[]
+  strategy: (arg0: import('fastify').FastifyRequest) => string | string[]
+  context?: (arg0: import('fastify').FastifyRequest) => any
+}>()
+
+// MercuriusDynamicSchemaEntry shape: required `name`, `resolvers`, `schema`,
+// and an optional `path`.
+expect<MercuriusDynamicSchemaEntry>().type.toBe<{
+  name: string
+  path?: string
+  resolvers: import('mercurius').IResolvers
+  schema: string
+}>()
