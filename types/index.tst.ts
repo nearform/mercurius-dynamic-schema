@@ -1,4 +1,5 @@
-import fastify from 'fastify'
+import fastify, { type FastifyPluginAsync, type FastifyRequest } from 'fastify'
+import { type IResolvers } from 'mercurius'
 import { expect } from 'tstyche'
 import mercuriusDynamicSchema, {
   MercuriusDynamicSchemaEntry,
@@ -89,15 +90,15 @@ app.register(mercuriusDynamicSchema, {
 // The plugin's default export is a FastifyPluginAsync parameterised by
 // MercuriusDynamicSchemaOptions (with default generics) or an empty object.
 expect(mercuriusDynamicSchema).type.toBeAssignableTo<
-  import('fastify').FastifyPluginAsync<MercuriusDynamicSchemaOptions | {}>
+  FastifyPluginAsync<MercuriusDynamicSchemaOptions | {}>
 >()
 
 // MercuriusDynamicSchemaOptions shape: required `schemas` array, required
 // `strategy` returning a string or string[], and an optional `context`.
 expect<MercuriusDynamicSchemaOptions>().type.toBe<{
   schemas: MercuriusDynamicSchemaEntry[]
-  strategy: (arg0: import('fastify').FastifyRequest) => string | string[]
-  context?: (arg0: import('fastify').FastifyRequest) => any
+  strategy: (arg0: FastifyRequest) => string | string[]
+  context?: (arg0: FastifyRequest) => any
 }>()
 
 // MercuriusDynamicSchemaEntry shape: required `name`, `resolvers`, `schema`,
@@ -105,6 +106,6 @@ expect<MercuriusDynamicSchemaOptions>().type.toBe<{
 expect<MercuriusDynamicSchemaEntry>().type.toBe<{
   name: string
   path?: string
-  resolvers: import('mercurius').IResolvers
+  resolvers: IResolvers
   schema: string
 }>()
