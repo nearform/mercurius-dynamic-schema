@@ -66,6 +66,11 @@
     "*.{js,jsx,ts,tsx}": "eslint --cache --fix"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
+  },
+  "overrides": {
+    "c8": {
+      "yargs": "^18.0.0"
+    }
   }
 }
