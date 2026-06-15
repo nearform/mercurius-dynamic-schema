@@ -3,7 +3,7 @@
   "version": "3.0.1",
   "description": "Serve different schema per request according a defined strategy",
   "main": "index.js",
-  "types": "index.d.ts",
+  "types": "types/index.d.ts",
   "type": "module",
   "scripts": {
     "lint": "eslint .",
@@ -11,7 +11,7 @@
     "prepare": "husky",
     "test": "npm run test:unit && npm run test:types",
     "test:unit": "c8 node --test test/*.test.js --check-coverage --statements 97.67 --branches 85.71 --functions 100 --lines 97.67",
-    "test:types": "tsd"
+    "test:types": "tstyche"
   },
   "repository": {
     "type": "git",
@@ -43,32 +43,34 @@
     "fastify-plugin": "^6.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^21.0.1",
-    "@commitlint/config-conventional": "^21.0.1",
-    "@eslint/eslintrc": "^3.3.3",
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
+    "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^10.0.1",
-    "@types/node": "^25.0.2",
+    "@types/node": "^25.9.1",
     "@types/ws": "^8.18.1",
     "c8": "^11.0.0",
-    "eslint": "^10.0.1",
+    "eslint": "^10.4.1",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
-    "globals": "^17.0.0",
+    "eslint-plugin-prettier": "^5.5.6",
+    "globals": "^17.6.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.0.4",
-    "mercurius": "^16.6.0",
-    "prettier": "^3.7.4",
-    "tsd": "^0.33.0",
-    "typescript": "^6.0.2",
-    "typescript-eslint": "^8.49.0"
+    "lint-staged": "^17.0.7",
+    "mercurius": "^16.9.0",
+    "prettier": "^3.8.3",
+    "tstyche": "^7.2.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.60.1"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --cache --fix"
   },
-  "tsd": {
-    "directory": "test/types"
-  },
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
+  },
+  "overrides": {
+    "c8": {
+      "yargs": "^18.0.0"
+    }
   }
 }
