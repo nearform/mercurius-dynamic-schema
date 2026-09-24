@@ -2,9 +2,9 @@ import fastify, { type FastifyPluginAsync, type FastifyRequest } from 'fastify'
 import { type IResolvers } from 'mercurius'
 import { expect } from 'tstyche'
 import mercuriusDynamicSchema, {
-  MercuriusDynamicSchemaEntry,
-  MercuriusDynamicSchemaOptions
-} from './index.js'
+  type MercuriusDynamicSchemaEntry,
+  type MercuriusDynamicSchemaOptions
+} from '../../index.js'
 
 // Smoke tests: ensure the plugin registers with the documented option shapes.
 // If a future change to index.d.ts breaks the public types, tsc inside tstyche
@@ -89,7 +89,7 @@ app.register(mercuriusDynamicSchema, {
 
 // The plugin's default export is a FastifyPluginAsync parameterised by
 // MercuriusDynamicSchemaOptions (with default generics) or an empty object.
-expect(mercuriusDynamicSchema).type.toBeAssignableTo<
+expect(mercuriusDynamicSchema).type.toBe<
   FastifyPluginAsync<MercuriusDynamicSchemaOptions | {}>
 >()
 

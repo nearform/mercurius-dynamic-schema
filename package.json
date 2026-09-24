@@ -3,7 +3,7 @@
   "version": "3.0.1",
   "description": "Serve different schema per request according a defined strategy",
   "main": "index.js",
-  "types": "types/index.d.ts",
+  "types": "index.d.ts",
   "type": "module",
   "scripts": {
     "lint": "eslint .",
